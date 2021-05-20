@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
-    "@umijs/preset-react": "1.x",
+    "@umijs/hooks": "^1.9.3",
+    "@umijs/preset-react": "^1.8.8",
     "antd": "^4.15.5",
     "react-canvas-nest": "^1.1.1",
     "umi": "^3.4.20"

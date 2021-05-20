@@ -1,16 +1,23 @@
-
+import {
+  HomeOutlined,
+  BankOutlined,
+  UserOutlined,
+  UsergroupAddOutlined,
+  AuditOutlined
+} from '@ant-design/icons'
 export const menuRoutes = [
   {
     path: '/',
     name: '首页',
     key: 'home',
     component: '@/pages/home',
-    icon: 'UserOutlined'
+    icon: HomeOutlined
   },
   {
     path: '/user',
     name: '用户管理',
     key: 'user',
+    icon:  UserOutlined,
     routes: [
       {
         path: '/user/list',
@@ -24,6 +31,7 @@ export const menuRoutes = [
         name: '新增用户',
         exact: true,
         key: 'user:list:add',
+        disappearMenu: true,
         component: '@/pages/user/edit'
       },
       {
@@ -31,6 +39,7 @@ export const menuRoutes = [
         name: '编辑用户',
         exact: true,
         key: 'user:list:edit',
+        disappearMenu: true,
         component: '@/pages/user/edit'
       }
     ]
