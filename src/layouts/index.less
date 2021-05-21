@@ -1,3 +1,36 @@
-.title {
-  background: rgb(121, 242, 157);
+@import url('../assets/css/color.less');
+.containerLayout {
+  width: 100vw;
+  .menu {
+    height: 100vh;
+    box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+    position: fixed;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+  }
+  
+  .contentLayout {
+    height: 100%;
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    width: 100%;
+    margin-left: 220px;
+    overflow-x: hidden;
+    transition: margin .2s;
+    &.collapsed{
+      margin-left: 80px;
+    }
+    .mainContent {
+      background: white;
+      margin: 0 16px 16px;
+      padding: 16px;
+      overflow: auto;
+      transition: all .5s;
+    }
+  }
+  
 }
+

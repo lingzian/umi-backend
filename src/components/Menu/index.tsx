@@ -10,36 +10,28 @@ import {useSelector, useDispatch}from 'dva'
 import type {ConnectState} from '@/models/model'
 const { SubMenu } = Menu;
 const MenuView: React.FC = (props) => {
-  const [collapsed, setCollapsed] = useState(false);
   const { config } = useSelector((state:ConnectState) => state)
-  const dispatch = useDispatch()
-  const selectMenu = (key:string, route:any) => {
-    let currentMenuOpenItem = 'home'
-    if(!route.routes) {
-      currentMenuOpenItem = key
-    }else {
-      currentMenuOpenItem = route.key
-    }
-    dispatch({
-      type: 'config/save',
-      action: {
-        currentRouteKey: key,
-        currentMenuOpenItem
-      }
-    })
-  }
-  console.log('asdasdasd',props)
-  const location = useLocation();
-  const selectedKeys = menuRoutes.filter((ele) => ele.path == location.pathname)[0].key
-  const defaultOpenKeys = 
 
-  useEffect(() => {
-    console.log('config', config.currentMenuOpenItem)
-  }, [config])
+  const location = useLocation();
+
+  const filterRoute = (menuRoutes:Array<any>) => {
+      for (const ele of menuRoutes) {
+        if(ele.path == location.pathname) {
+          return ele
+        }
+        if(ele.routes) {
+          const target:any = filterRoute(ele.routes)
+          if(target) return target
+        }
+      }
+  }
+
+  const menuOperateKey = filterRoute(menuRoutes)
+  console.log('menuOperateKey', menuOperateKey)
 
   return (
     <Layout.Sider
-      collapsed={collapsed}
+      collapsed={config.collapsed}
       style={{
         overflow: 'auto',
         height: '100vh',
@@ -52,17 +44,15 @@ const MenuView: React.FC = (props) => {
       <div className="logo">
         <Link to={{ pathname: '/' }}>
           <img alt="logo" src={logo} />
-          {!collapsed && <h1>Antd多页签模板</h1>}
+          {!config.collapsed && <h1>Antd多页签模板</h1>}
         </Link>
       </div>
       <Menu
-        // defaultOpenKeys={['user']}
-        defaultOpenKeys={[config.currentMenuOpenItem]}
+        defaultOpenKeys={menuOperateKey.subMenu}
         mode="inline"
         onClick={() => {}}
-        selectedKeys={[selectedKeys]}
-        theme={'light'}
-        // theme={theme === 'default' ? 'light' : 'dark'}
+        selectedKeys={[menuOperateKey.key]}
+        theme={config.theme ? 'dark' : 'light'}
       >
         {menuRoutes.map((ele: any, idx: any): JSX.Element => {
           let RootIcon = ele.icon
@@ -77,9 +67,7 @@ const MenuView: React.FC = (props) => {
                       return('')
                     }else {
                       return (
-                        <Menu.Item title={child.name} key={child.key} onClick={() => {
-                          selectMenu(child.key, ele)
-                        }}>
+                        <Menu.Item title={child.name} key={child.key}>
                           <Link to={child.path}>{ChildIcon && <ChildIcon />}{child.name}</Link>
                         </Menu.Item>
                       )
@@ -90,10 +78,8 @@ const MenuView: React.FC = (props) => {
             );
           } else {
             return (
-              <Menu.Item title={ele.name} key={ele.key} onClick={() => {
-                selectMenu(ele.key, ele)
-              }}>
-                <Link to={ele.path}>{RootIcon && <RootIcon />}{ele.name}</Link>
+              <Menu.Item title={ele.name} key={ele.key}>
+                <Link to={ele.path}>{RootIcon && <RootIcon />}<span>{ele.name}</span> </Link>
               </Menu.Item>
             );
           }

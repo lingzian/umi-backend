@@ -11,20 +11,24 @@ export const menuRoutes = [
     name: '首页',
     key: 'home',
     component: '@/pages/home',
-    icon: HomeOutlined
+    icon: HomeOutlined,
+    subMenu: ['home'],
   },
   {
     path: '/user',
     name: '用户管理',
     key: 'user',
     icon:  UserOutlined,
+    redirect: '/user/list',
+    subMenu: ['user'],
     routes: [
       {
         path: '/user/list',
         name: '用户列表',
         exact: true,
         key: 'user:list:view',
-        component: '@/pages/user/list'
+        component: '@/pages/user/list',
+        subMenu: ['user']
       },
       {
         path: '/user/list/add',
@@ -32,7 +36,8 @@ export const menuRoutes = [
         exact: true,
         key: 'user:list:add',
         disappearMenu: true,
-        component: '@/pages/user/edit'
+        component: '@/pages/user/edit',
+        subMenu: ['user']
       },
       {
         path: '/user/list/edit',
@@ -40,7 +45,8 @@ export const menuRoutes = [
         exact: true,
         key: 'user:list:edit',
         disappearMenu: true,
-        component: '@/pages/user/edit'
+        component: '@/pages/user/edit',
+        subMenu: ['user']
       }
     ]
   }

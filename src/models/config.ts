@@ -3,8 +3,8 @@ import { useLocalStorageState } from '@umijs/hooks';
 import { myStore } from '@/utils'
 
 export interface ConfigModelState {
-  currentRouteKey: string; 
-  currentMenuOpenItem: string;
+  theme: boolean; // 主题：true为黑色 false为白色
+  collapsed: boolean; // menu栏是否打开
 }
 
 export interface ConfigModelType {
@@ -28,8 +28,8 @@ const ConfigModel: ConfigModelType = {
   namespace: 'config',
 
   state: {
-    currentRouteKey: 'home',
-    currentMenuOpenItem: 'home'
+    theme: false,
+    collapsed: false
   },
 
   effects: {
