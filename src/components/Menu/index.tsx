@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, Layout } from 'antd';
-import { Link, useLocation } from 'umi';
+import { Link, useLocation, useHistory } from 'umi';
 import logo from '@/assets/img/logo.png';
 import { UserOutlined, HomeOutlined } from '@ant-design/icons';
 import './index.less';
@@ -13,6 +13,8 @@ const MenuView: React.FC = (props) => {
   const { config } = useSelector((state:ConnectState) => state)
 
   const location = useLocation();
+  const history = useHistory();
+  console.log('location', history)
 
   const filterRoute = (menuRoutes:Array<any>) => {
       for (const ele of menuRoutes) {
