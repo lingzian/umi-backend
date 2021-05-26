@@ -3,69 +3,66 @@ import {
   BankOutlined,
   UserOutlined,
   UsergroupAddOutlined,
-  AuditOutlined
-} from '@ant-design/icons'
+  AuditOutlined,
+} from '@ant-design/icons';
 export const menuRoutes = [
   {
     path: '/',
     name: '首页',
-    key: 'home',
+    key: '/home',
     component: '@/pages/home',
     icon: HomeOutlined,
-    subMenu: ['home'],
+    subMenu: ['/home'],
   },
   {
     path: '/user',
     name: '用户管理',
-    key: 'user',
-    icon:  UserOutlined,
+    key: '/user',
+    icon: UserOutlined,
     redirect: '/user/list',
-    subMenu: ['user'],
+    subMenu: ['/user'],
     routes: [
       {
         path: '/user/list',
         name: '用户列表',
         exact: true,
-        key: 'user:list:view',
+        key: '/user/list',
         component: '@/pages/user/list',
-        subMenu: ['user']
+        subMenu: ['/user'],
       },
       {
         path: '/user/list/add',
         name: '新增用户',
         exact: true,
-        key: 'user:list:add',
+        key: '/user/list/add',
         disappearMenu: true,
         component: '@/pages/user/edit',
-        subMenu: ['user']
+        subMenu: ['/user'],
       },
       {
         path: '/user/list/edit',
         name: '编辑用户',
         exact: true,
-        key: 'user:list:edit',
+        key: '/user/list/edit',
         disappearMenu: true,
         component: '@/pages/user/edit',
-        subMenu: ['user']
-      }
-    ]
-  }
-]
+        subMenu: ['/user'],
+      },
+    ],
+  },
+];
 export default [
   {
-    path: '/login', 
+    path: '/login',
     exact: true,
     component: '@/pages/login',
-    key: 'login'
+    key: 'login',
   },
-  { 
-    path: '/', 
+  {
+    path: '/',
     component: '@/layouts',
-    wrappers: [
-      '@/components/Auth',
-    ],
+    wrappers: ['@/components/Auth'],
     name: 'layout',
-    routes: menuRoutes
+    routes: menuRoutes,
   },
-]
-
+];
