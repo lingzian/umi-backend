@@ -8,3 +8,7 @@ declare module '*.svg' {
   const url: string;
   export default url;
 }
+
+type CommonObjectType<T = any> = Record<string, T>;
+
+type RefType = any;

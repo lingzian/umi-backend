@@ -13,8 +13,30 @@
       "@/*": ["src/*"],
       "@@/*": ["src/.umi/*"]
     },
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+
+    // new add
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "downlevelIteration": true
   },
+  // "rules": {
+  //   //  new add
+  //   "member-access": false,
+  //   "ordered-imports": false,
+  //   "quotemark": false,
+  //   "no-console": false,
+  //   "semicolon": false,
+  //   "jsx-no-lambda": false
+  // },
   "include": [
     "mock/**/*",
     "src/**/*",

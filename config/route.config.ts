@@ -5,6 +5,9 @@ import {
   UsergroupAddOutlined,
   AuditOutlined,
 } from '@ant-design/icons';
+
+// disappearMenu : 不需要在menu上出现
+// submenu: 页面所属的menu栏目
 export const menuRoutes = [
   {
     path: '/',
@@ -19,9 +22,12 @@ export const menuRoutes = [
     name: '用户管理',
     key: '/user',
     icon: UserOutlined,
-    redirect: '/user/list',
     subMenu: ['/user'],
     routes: [
+      {
+        path: '/user',
+        redirect: '/user/list',
+      },
       {
         path: '/user/list',
         name: '用户列表',
