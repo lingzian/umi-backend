@@ -24,9 +24,6 @@ export interface RequestConfig extends RequestOptionsInit {}
 const request = extend({
   errorHandler, // 默认错误处理
   // credentials: 'include', // 默认请求是否带上cookie
-  headers: {
-    'Content-Type': 'application/json; charset=utf-8',
-  },
 });
 
 request.interceptors.request.use((url, options) => {

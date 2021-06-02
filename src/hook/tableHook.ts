@@ -18,9 +18,14 @@ export const useServiceCallback = (
       setLoading(true);
       setError(null);
       service({ params })
-        .then((res) => {
+        .then((res: any) => {
+          console.log('res', res);
           setLoading(false);
-          setResponse(res);
+          setResponse({
+            rows: res.results,
+            total: 200,
+            // total: res.results.length
+          });
         })
         .catch(() => {
           setLoading(false);
@@ -37,7 +42,6 @@ const useService = (
 ): object => {
   const [callback, { loading, error, response }]: any[] =
     useServiceCallback(service);
-  console.log('callback', callback);
   useEffect(() => {
     callback(params);
     return () => {};

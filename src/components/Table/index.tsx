@@ -4,6 +4,7 @@ import React, {
   useImperativeHandle,
   useRef,
   ReactNode,
+  useEffect,
   FC,
 } from 'react';
 import { Table } from 'antd';
@@ -114,9 +115,13 @@ const MyTable: FC<TableProps> = forwardRef(
       apiFun,
       tableParams,
     );
+    useEffect(() => {
+      console.log('response', response);
+    }, [response]);
     const validData = response?.total ? response : {};
-    const { rows: tableData = [], total } = validData;
 
+    const { rows: tableData = [], total } = validData;
+    console.log('validData', validData);
     // 执行搜索操作
     const handleSearch = (val: object): void => {
       setSearchParams(val);
@@ -232,7 +237,7 @@ const MyTable: FC<TableProps> = forwardRef(
     return (
       <div>
         {/* 搜索栏 */}
-        {searchConfigList && searchConfigList.length > 0 && (
+        {/* {searchConfigList && searchConfigList.length > 0 && (
           <SearchView
             ref={searchForm}
             config={searchConfigList}
@@ -240,7 +245,7 @@ const MyTable: FC<TableProps> = forwardRef(
             handleSearch={handleSearch}
             onFieldsChange={onFieldsChange}
           />
-        )}
+        )} */}
         {/* 列表 */}
         <Table
           {...showCheckbox}
