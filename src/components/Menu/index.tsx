@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, Layout } from 'antd';
-import { Link, useLocation, useHistory } from 'umi';
+import { Link, useLocation, useHistory, useRouteMatch } from 'umi';
 import logo from '@/assets/img/logo.png';
 import { UserOutlined, HomeOutlined } from '@ant-design/icons';
 import './index.less';
@@ -14,22 +14,31 @@ const MenuView: React.FC = (props) => {
 
   const location = useLocation();
   const history = useHistory();
+  const match = useRouteMatch();
   console.log('props.routes', location);
 
   const filterRoute = (menuRoutes: Array<any>) => {
     for (const ele of menuRoutes) {
       if (ele.path == location.pathname) {
-        return ele;
+        return {
+          ...ele,
+          parent: [ele.key],
+        };
       }
       if (ele.routes) {
         const target: any = filterRoute(ele.routes);
-        if (target) return target;
+        if (target) {
+          return {
+            ...target,
+            parent: [ele.key],
+          };
+        }
       }
     }
   };
 
   // 找出当前路由的对象
-  // const menuOperateKey = filterRoute(menuRoutes);
+  const menuOperateKey = filterRoute(menuRoutes);
 
   return (
     <Layout.Sider
@@ -49,35 +58,34 @@ const MenuView: React.FC = (props) => {
           {!config.collapsed && <h1>Antd多页签模板</h1>}
         </Link>
       </div>
-      {/* <Menu
-        defaultOpenKeys={menuOperateKey.subMenu}
+      <Menu
+        defaultOpenKeys={menuOperateKey.parent} // 打开的Menu
         mode="inline"
         onClick={() => {}}
-        selectedKeys={[menuOperateKey.key]}
+        selectedKeys={[menuOperateKey.key]} // 打开的SubMenu
         theme={config.theme ? 'dark' : 'light'}
       >
         {menuRoutes.map((ele: any, idx: any): JSX.Element => {
           let RootIcon = ele.icon;
-          // console.log('rootIcon', ele)
           if (ele.routes) {
             return (
               <SubMenu title={ele.name} icon={<RootIcon />} key={ele.key}>
-                {ele.routes &&
-                  ele.routes.map((child: any, cIdx: any) => {
-                    let ChildIcon = child.icon;
-                    if (child.disappearMenu || child.redirect) {
-                      return '';
-                    } else {
-                      return (
-                        <Menu.Item title={child.name} key={child.key}>
-                          <Link to={child.path}>
-                            {ChildIcon && <ChildIcon />}
-                            {child.name}
-                          </Link>
-                        </Menu.Item>
-                      );
-                    }
-                  })}
+                {ele.routes.map((child: any, cIdx: any) => {
+                  let ChildIcon = child.icon;
+                  if (child.redirect) {
+                    return '';
+                  } else {
+                    console.log('12312313123');
+                    return (
+                      <Menu.Item title={child.name} key={child.key}>
+                        <Link to={child.path}>
+                          {ChildIcon && <ChildIcon />}
+                          {child.name}
+                        </Link>
+                      </Menu.Item>
+                    );
+                  }
+                })}
               </SubMenu>
             );
           } else {
@@ -91,7 +99,7 @@ const MenuView: React.FC = (props) => {
             );
           }
         })}
-      </Menu> */}
+      </Menu>
     </Layout.Sider>
   );
 };

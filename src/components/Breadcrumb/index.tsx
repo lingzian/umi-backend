@@ -17,7 +17,7 @@ const Breadcrumbs: FC = () => {
       return prev.concat(item.routes ? flattenRoutes(item.routes) : item);
     }, []);
   };
-  const [allRoutes, setAllRoutes] = useState(flattenRoutes(menuRoutes));
+  const [allRoutes, setAllRoutes] = useState(flattenRoutes(menuRoutes)); // 扁平化所有路由信息
 
   const createBread = () => {
     let breadArr = [] as any;
@@ -30,44 +30,44 @@ const Breadcrumbs: FC = () => {
         },
       ]);
     }
+    // 获取当前路径的key
     let key = allRoutes
       .find((ele) => ele.path == location.pathname)
       .key.split('/');
-
+    // 通过key 组合父子的path
     let routeArr = key.reduce((total: any, ele: any, index: any) => {
       let pre = index > 1 ? total[index - 1] : false;
       return total.concat((pre ? pre : '') + '/' + ele);
     }, [] as any);
-
+    // 通过每个path找到每个path的对象
     routeArr.forEach((ele: any, idx: any) => {
       breadArr.push(allRoutes.find((route: any) => route.path == ele));
     });
     return breadArr;
   };
-  // const breadcrumbs = createBread();
+  const breadcrumbs = createBread();
   return (
-    <div></div>
-    // <Breadcrumb style={{ display: 'inline-block' }}>
-    //   {breadcrumbs.map((bc: any, index: number) => {
-    //     return (
-    //       <Breadcrumb.Item key={bc.key}>
-    //         <Button
-    //           disabled={
-    //             (bc.routes && bc.path !== '/') ||
-    //             index === breadcrumbs.length - 1
-    //           }
-    //           onClick={() => {
-    //             history.push(bc.path);
-    //           }}
-    //           style={{ padding: '0' }}
-    //           type="link"
-    //         >
-    //           {bc.name}
-    //         </Button>
-    //       </Breadcrumb.Item>
-    //     );
-    //   })}
-    // </Breadcrumb>
+    <Breadcrumb style={{ display: 'inline-block' }}>
+      {breadcrumbs.map((bc: any, index: number) => {
+        return (
+          <Breadcrumb.Item key={bc.key}>
+            <Button
+              disabled={
+                (bc.routes && bc.path !== '/') ||
+                index === breadcrumbs.length - 1
+              }
+              onClick={() => {
+                history.push(bc.path);
+              }}
+              style={{ padding: '0' }}
+              type="link"
+            >
+              {bc.name}
+            </Button>
+          </Breadcrumb.Item>
+        );
+      })}
+    </Breadcrumb>
   );
 };
 

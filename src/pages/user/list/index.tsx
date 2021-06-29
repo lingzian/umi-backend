@@ -1,27 +1,32 @@
-import React, { useRef, FC, useEffect } from 'react';
+import React, { useState, useRef, FC, useEffect } from 'react';
 import { history } from 'umi';
-import { Button, Input } from 'antd';
+import { Button, Input, Modal, message } from 'antd';
 import MyTable from '@/components/Table';
 import { previewImg } from '@/utils';
 import MySelect from '@/components/MySelect';
 import { getList } from '@/services/tableList';
+import EditUser from '../edit';
 // import commom from '@/api'
 
 const UserList: FC = () => {
   const tableRef: RefType = useRef();
+  const [state, setState] = useState({
+    type: 'add',
+    showPopup: false,
+  });
   useEffect(() => {}, []);
   // 添加
   const add = () => {
-    history.push('/user/list/add');
+    setState({
+      type: 'add',
+      showPopup: true,
+    });
   };
   // 编辑
   const edit = () => {
-    // history.push('/user/list/edit?id=666');
-    history.push({
-      pathname: '/user/list/edit',
-      query: {
-        id: '123',
-      },
+    setState({
+      type: 'edit',
+      showPopup: true,
     });
   };
 
@@ -108,6 +113,17 @@ const UserList: FC = () => {
         searchConfigList={searchConfigList}
         extraProps={{ results: 10 }}
       />
+      <Modal
+        title={state.type === 'edit' ? '编辑用户' : '新建用户'}
+        visible={state.showPopup}
+        onCancel={() => setState((ele) => ({ ...ele, showPopup: false }))}
+        destroyOnClose
+        width={800}
+        footer={null}
+      >
+        <EditUser />
+        {/* <EditUser successCallback={this.successCallback} onCancel={() => this.setState({visible: false})} type={type} initialValues={userDetail} /> */}
+      </Modal>
     </>
   );
 };

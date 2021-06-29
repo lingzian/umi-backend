@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FC } from 'react';
-import { useParams, useRouteMatch } from 'umi';
+import { useParams, useRouteMatch, useLocation } from 'umi';
 import { Form, Input, Button, message, Switch, Spin } from 'antd';
 import MySelect from '@/components/MySelect';
 import { formItemLayout, wrapperCol } from '@/assets/js/config';
@@ -7,11 +7,10 @@ import MyUpload from '@/components/MyUpload';
 // import Editor from '@/components/common/editor'
 import './index.less';
 
-const FormView: FC = () => {
+const FormView: FC = (props) => {
   const params = useParams();
   const match = useRouteMatch();
-  console.log('params', params);
-  console.log('match', match);
+  const location = useLocation();
   const id = params.id;
 
   const [form] = Form.useForm();
@@ -34,12 +33,21 @@ const FormView: FC = () => {
     });
   }, [id, resetFields, setFieldsValue]);
 
-  const handleSubmit = () => {
+  const handleSubmit = (values: any) => {
+    console.log('values', values);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
       message.success('修改成功');
     }, 1000);
+  };
+
+  const normFile = (e: any) => {
+    console.log('Upload event:', e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
   };
 
   return (
@@ -78,6 +86,8 @@ const FormView: FC = () => {
         <Form.Item
           label="头像"
           name="avatar"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
           extra={
             <span>
               只支持<b>JPG、PNG、GIF</b>，大小不超过<b>5M</b>
@@ -86,7 +96,7 @@ const FormView: FC = () => {
         >
           <MyUpload />
         </Form.Item>
-        <Form.Item
+        {/* <Form.Item
           label="描述"
           name="content"
           rules={[
@@ -100,8 +110,8 @@ const FormView: FC = () => {
             },
           ]}
         >
-          {/* <Editor /> */}
-        </Form.Item>
+          <Editor />
+        </Form.Item> */}
         <Form.Item label="状态" name="status" valuePropName="checked">
           <Switch checkedChildren="开启" unCheckedChildren="禁用" />
         </Form.Item>
