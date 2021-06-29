@@ -46,7 +46,7 @@ export const menuRoutes = [
         subMenu: ['/user'],
       },
       {
-        path: '/user/list/edit',
+        path: '/user/list/edit/:id',
         name: '编辑用户',
         exact: true,
         key: '/user/list/edit',

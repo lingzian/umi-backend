@@ -34,6 +34,7 @@ const SearchForm: FC<SearchProps> = forwardRef(
       handleSearch(values);
     };
 
+    // 初始化值
     const initialValues = config.reduce(
       (prev: CommonObjectType, next: CommonObjectType) => ({
         ...prev,

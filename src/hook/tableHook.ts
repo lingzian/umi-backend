@@ -19,7 +19,6 @@ export const useServiceCallback = (
       setError(null);
       service({ params })
         .then((res: any) => {
-          console.log('res', res);
           setLoading(false);
           setResponse({
             rows: res.results,
@@ -27,7 +26,8 @@ export const useServiceCallback = (
             // total: res.results.length
           });
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log('error', e);
           setLoading(false);
         });
     },
@@ -40,8 +40,10 @@ const useService = (
   service: (arg0?: any) => Promise<{}>,
   params?: CommonObjectType,
 ): object => {
-  const [callback, { loading, error, response }]: any[] =
-    useServiceCallback(service);
+  const [
+    callback,
+    { loading, error, response = { rows: [], total: 0 } },
+  ]: any[] = useServiceCallback(service);
   useEffect(() => {
     callback(params);
     return () => {};

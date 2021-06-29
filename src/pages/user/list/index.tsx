@@ -1,5 +1,5 @@
 import React, { useRef, FC, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { history } from 'umi';
 import { Button, Input } from 'antd';
 import MyTable from '@/components/Table';
 import { previewImg } from '@/utils';
@@ -9,17 +9,20 @@ import { getList } from '@/services/tableList';
 
 const UserList: FC = () => {
   const tableRef: RefType = useRef();
-  const history = useHistory();
-  useEffect(() => {
-    // alert(0)
-  }, []);
+  useEffect(() => {}, []);
   // 添加
   const add = () => {
     history.push('/user/list/add');
   };
   // 编辑
   const edit = () => {
-    history.push('/user/list/edit?id=666');
+    // history.push('/user/list/edit?id=666');
+    history.push({
+      pathname: '/user/list/edit',
+      query: {
+        id: '123',
+      },
+    });
   };
 
   // 新增按钮
@@ -57,16 +60,16 @@ const UserList: FC = () => {
   const preview = (url: string) =>
     previewImg(<img src={url} width="100%" alt="" />);
   const columns = [
-    {
-      title: 'avatar',
-      dataIndex: 'picture',
-      render: (picture: CommonObjectType<string>) => (
-        <span onClick={() => preview(picture.thumbnail)}>
-          <img src={picture.thumbnail} width="40" alt="" />
-        </span>
-      ),
-      width: '3%',
-    },
+    // {
+    //   title: 'avatar',
+    //   dataIndex: 'picture',
+    //   render: (picture: CommonObjectType<string>) => (
+    //     <span onClick={() => preview(picture.thumbnail)}>
+    //       <img src={picture.thumbnail} width="40" alt="" />
+    //     </span>
+    //   ),
+    //   width: '3%',
+    // },
     {
       title: 'name',
       dataIndex: 'name',

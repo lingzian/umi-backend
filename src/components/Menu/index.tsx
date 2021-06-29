@@ -14,6 +14,7 @@ const MenuView: React.FC = (props) => {
 
   const location = useLocation();
   const history = useHistory();
+  console.log('props.routes', location);
 
   const filterRoute = (menuRoutes: Array<any>) => {
     for (const ele of menuRoutes) {
@@ -28,7 +29,7 @@ const MenuView: React.FC = (props) => {
   };
 
   // 找出当前路由的对象
-  const menuOperateKey = filterRoute(menuRoutes);
+  // const menuOperateKey = filterRoute(menuRoutes);
 
   return (
     <Layout.Sider
@@ -48,7 +49,7 @@ const MenuView: React.FC = (props) => {
           {!config.collapsed && <h1>Antd多页签模板</h1>}
         </Link>
       </div>
-      <Menu
+      {/* <Menu
         defaultOpenKeys={menuOperateKey.subMenu}
         mode="inline"
         onClick={() => {}}
@@ -90,7 +91,7 @@ const MenuView: React.FC = (props) => {
             );
           }
         })}
-      </Menu>
+      </Menu> */}
     </Layout.Sider>
   );
 };

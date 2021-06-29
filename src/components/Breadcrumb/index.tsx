@@ -44,29 +44,30 @@ const Breadcrumbs: FC = () => {
     });
     return breadArr;
   };
-  const breadcrumbs = createBread();
+  // const breadcrumbs = createBread();
   return (
-    <Breadcrumb style={{ display: 'inline-block' }}>
-      {breadcrumbs.map((bc: any, index: number) => {
-        return (
-          <Breadcrumb.Item key={bc.key}>
-            <Button
-              disabled={
-                (bc.routes && bc.path !== '/') ||
-                index === breadcrumbs.length - 1
-              }
-              onClick={() => {
-                history.push(bc.path);
-              }}
-              style={{ padding: '0' }}
-              type="link"
-            >
-              {bc.name}
-            </Button>
-          </Breadcrumb.Item>
-        );
-      })}
-    </Breadcrumb>
+    <div></div>
+    // <Breadcrumb style={{ display: 'inline-block' }}>
+    //   {breadcrumbs.map((bc: any, index: number) => {
+    //     return (
+    //       <Breadcrumb.Item key={bc.key}>
+    //         <Button
+    //           disabled={
+    //             (bc.routes && bc.path !== '/') ||
+    //             index === breadcrumbs.length - 1
+    //           }
+    //           onClick={() => {
+    //             history.push(bc.path);
+    //           }}
+    //           style={{ padding: '0' }}
+    //           type="link"
+    //         >
+    //           {bc.name}
+    //         </Button>
+    //       </Breadcrumb.Item>
+    //     );
+    //   })}
+    // </Breadcrumb>
   );
 };
 

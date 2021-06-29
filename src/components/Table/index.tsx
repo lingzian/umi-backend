@@ -22,7 +22,7 @@ import { RequestOptionsInit } from 'umi-request';
  * @param {function} onFieldsChange 处理搜索栏表单联动事件
  * @param {object} extraProps 额外的搜索参数（不在搜索配置内的）
  * @param {function} onSelectRow 复选框操作回调
- * @param {string} rowKey 表格行的key
+ * @param {string | Function} rowKey 表格行的key
  * @param {function} sortConfig 自定义表格排序字段
  * @param {function} expandedRowRender 额外的展开行
  * @param {function} onExpand 点击展开图标时触发
@@ -31,15 +31,13 @@ import { RequestOptionsInit } from 'umi-request';
  * @param {string[]} extraPagation 额外的分页大小
  */
 
-type RefType = any;
-
 interface TableProps {
   columns: object[];
-  apiFun: (arg0?: RequestOptionsInit) => Promise<{}>;
+  apiFun: (arg0?: any) => Promise<{}>;
   ref?: RefType;
   searchConfigList?: object[];
   extraProps?: object;
-  rowKey?: string;
+  rowKey?: any;
   rowClassName?: string;
   small?: boolean;
   showHeader?: boolean;
@@ -79,17 +77,13 @@ const MyTable: FC<TableProps> = forwardRef(
     } = props;
 
     // 搜索参数,如果有特殊需要处理的参数，就处理
-    const searchObj = searchConfigList
-      ? searchConfigList.reduce(
-          (prev: CommonObjectType, next: CommonObjectType) =>
-            Object.assign(prev, {
-              [next.key]: next.fn
-                ? next.fn(next.initialValue)
-                : next.initialValue,
-            }),
-          {},
-        )
-      : {};
+    const searchObj = searchConfigList.reduce(
+      (prev: CommonObjectType, next: CommonObjectType) =>
+        Object.assign(prev, {
+          [next.key]: next.fn ? next.fn(next.initialValue) : next.initialValue,
+        }),
+      {},
+    );
 
     // 初始参数
     const initParams = {
@@ -100,7 +94,7 @@ const MyTable: FC<TableProps> = forwardRef(
     };
 
     // 多选框的选择值
-    const [selectedKeys, setSelectedKeys] = useState([] as any);
+    const [selectedKeys, setSelectedKeys] = useState([]);
     // 列表所有的筛选参数（包括搜索、分页、排序等）
     const [tableParams, setTableParams] = useState(initParams);
     // 列表搜索参数
@@ -111,17 +105,14 @@ const MyTable: FC<TableProps> = forwardRef(
     const [curPageNo, setCurPageNo] = useState(initParams.pageNum);
     const [curPageSize, setCurPageSize] = useState(initParams.pageSize);
 
+    // 请求数据
     const { loading = false, response = {} }: CommonObjectType = useService(
       apiFun,
       tableParams,
     );
-    useEffect(() => {
-      console.log('response', response);
-    }, [response]);
     const validData = response?.total ? response : {};
-
     const { rows: tableData = [], total } = validData;
-    console.log('validData', validData);
+
     // 执行搜索操作
     const handleSearch = (val: object): void => {
       setSearchParams(val);
@@ -141,13 +132,14 @@ const MyTable: FC<TableProps> = forwardRef(
         pageSize: curPageSize,
       });
     };
+
     // 列表复选框选中变化
     const onSelectChange = (
       selectedRowKeys: any[],
       selectedRows: any[],
     ): void => {
       setSelectedKeys(selectedRowKeys);
-      onSelectRow && onSelectRow(selectedRowKeys, selectedRows);
+      onSelectRow(selectedRowKeys, selectedRows);
     };
     // 复选框配置
     const rowSelection = {
@@ -179,7 +171,7 @@ const MyTable: FC<TableProps> = forwardRef(
       // 如果有sort排序并且sort参数改变时，优先排序
       const sortObj = sortConfig ? sortConfig(sorter) : {};
       setSortParams(sortObj);
-
+      console.log('pagination', pagination);
       const { current: pageNum, pageSize } = pagination;
       setCurPageNo(pageNum);
       setCurPageSize(pageSize);
@@ -220,24 +212,10 @@ const MyTable: FC<TableProps> = forwardRef(
       },
     }));
 
-    // const Foo = <T>(props: Props<T>) => {
-    //   return <div> {props.content}</div>;
-    // }
-    // function Foo<T>(props: Props<T>) {
-    //   return <div> {props.content}</div>;
-    // }
-    interface GlobalTableProp<T> {
-      columns: [];
-      datasource: T[];
-    }
-    const GlobalTable = <T extends {}>(props: GlobalTableProp<T>) => {
-      return <div></div>;
-    };
-
     return (
       <div>
         {/* 搜索栏 */}
-        {/* {searchConfigList && searchConfigList.length > 0 && (
+        {searchConfigList.length > 0 && (
           <SearchView
             ref={searchForm}
             config={searchConfigList}
@@ -245,7 +223,7 @@ const MyTable: FC<TableProps> = forwardRef(
             handleSearch={handleSearch}
             onFieldsChange={onFieldsChange}
           />
-        )} */}
+        )}
         {/* 列表 */}
         <Table
           {...showCheckbox}
@@ -277,16 +255,18 @@ MyTable.defaultProps = {
   searchConfigList: [],
   ref: null,
   extraProps: {},
-  rowKey: 'id',
+  rowKey: (record) => {
+    return record.cell;
+  },
   rowClassName: '',
   small: false,
   showHeader: true,
-  extraPagation: ['300'],
+  extraPagation: [],
   beforeSearch: () => {},
   onSelectRow: () => {},
   onFieldsChange: () => {},
   sortConfig: () => {},
-  expandedRowRender: () => <></>,
+  expandedRowRender: null,
   onExpand: () => {},
 };
 
