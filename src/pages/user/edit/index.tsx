@@ -7,11 +7,13 @@ import MyUpload from '@/components/MyUpload';
 // import Editor from '@/components/common/editor'
 import './index.less';
 
-const FormView: FC = (props) => {
+interface props {
+  successCallback: Function;
+}
+const FormView: FC<props> = (props) => {
   const params = useParams();
   const match = useRouteMatch();
   const location = useLocation();
-  const id = params.id;
 
   const [form] = Form.useForm();
   const { setFieldsValue, resetFields } = form;
@@ -20,18 +22,21 @@ const FormView: FC = (props) => {
 
   // 编辑状态
   useEffect(() => {
-    if (!id) {
-      resetFields();
-      return;
-    }
     setFieldsValue({
       name: 'Jacob Jørgensen',
       gender: 'male',
-      avatar: 'https://randomuser.me/api/portraits/thumb/men/84.jpg',
-      content: 'jacob.jorgensen@example.com',
+      avatar: [
+        {
+          uid: '-1',
+          name: 'image.png',
+          status: 'done',
+          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        },
+      ],
+      // content: 'jacob.jorgensen@example.com',
       status: Math.random() > 0.5,
     });
-  }, [id, resetFields, setFieldsValue]);
+  }, [resetFields, setFieldsValue]);
 
   const handleSubmit = (values: any) => {
     console.log('values', values);
@@ -39,15 +44,8 @@ const FormView: FC = (props) => {
     setTimeout(() => {
       setLoading(false);
       message.success('修改成功');
+      props.successCallback();
     }, 1000);
-  };
-
-  const normFile = (e: any) => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
   };
 
   return (
@@ -86,32 +84,47 @@ const FormView: FC = (props) => {
         <Form.Item
           label="头像"
           name="avatar"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
           extra={
             <span>
-              只支持<b>JPG、PNG、GIF</b>，大小不超过<b>5M</b>
+              只支持<b>JPG、PNG、GIF</b>，大小不超过<b>2M</b>
             </span>
           }
-        >
-          <MyUpload />
-        </Form.Item>
-        {/* <Form.Item
-          label="描述"
-          name="content"
           rules={[
             {
-              validator: async (rule, value) => {
-                const h = value.toHTML();
-                if (h === '<p></p>' || !h) {
-                  throw new Error('请输入内容');
+              validator: (rule, value, callback) => {
+                console.log('验证', value);
+                if (value.length <= 0) {
+                  callback('请选择图片');
+                } else {
+                  return Promise.resolve();
                 }
               },
             },
           ]}
         >
-          <Editor />
-        </Form.Item> */}
+          {/* {getFieldDecorator('attachment', {
+            rules: [
+            { required: true, message: '请上传相关图片' },
+            { validator: (rule, value, callback) =>　{
+              if (value) {
+              const { aware } = this.props;
+              const { fileList } = aware;
+              const newFileList=fileList.map(item => ({...item}));
+              if (!newFileList) {
+              callback('请上传相关图片');
+              } else {
+              newFileList.length ? callback() : callback('请上传相关图片');
+              }
+              }
+              callback(); // callback方法必须要有，否则会报错
+             } },
+            ],
+            })(
+              <MyUpload />
+          )} */}
+          <MyUpload />
+        </Form.Item>
+
         <Form.Item label="状态" name="status" valuePropName="checked">
           <Switch checkedChildren="开启" unCheckedChildren="禁用" />
         </Form.Item>

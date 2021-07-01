@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode, useRef } from 'react';
 import { Upload, message, Modal } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { UploadProps } from 'antd/lib/upload/Upload';
@@ -20,14 +20,7 @@ interface FileProps {
 }
 const MyUpload = ({
   onChange,
-  value = [
-    // {
-    //   uid: '-1',
-    //   name: 'image.png',
-    //   status: 'done',
-    //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    // },
-  ],
+  value = [],
   amount = 4,
   size,
   otherProps,
@@ -53,9 +46,33 @@ const MyUpload = ({
   const handleCancel = () => {
     setState((ele) => ({ ...ele, previewVisible: false }));
   };
-  const handleChange = ({ fileList }) => {
-    onChange(fileList);
-    setState((ele) => ({ ...ele, fileList: fileList }));
+  const handleChange = (info) => {
+    console.log('onchange', info);
+    let curFileList = info.fileList;
+    curFileList = curFileList.map((file) => {
+      if (file.response) {
+        // 这里上传组件回调的数据，有些是提供给上传组件自身使用的，所以不能不要
+        // 而需要向后端提交的数据这里提前封装起来，以方便最终的提交
+        let saveParams = {};
+        saveParams['filename'] = file.response.name;
+        saveParams['url'] = file.response.url;
+        file['saveParams'] = saveParams;
+      }
+      return file;
+    });
+    curFileList = curFileList.filter((file) => {
+      if (file.size / 1024 / 1024 <= 2) {
+        if (file.response) {
+          return file.response.status == 'done';
+        }
+        return true;
+      } else {
+        return false;
+      }
+    });
+    console.log('curFileList', curFileList);
+    onChange(curFileList);
+    // setState((ele) => ({ ...ele, fileList: curFileList }));
   };
 
   const handlePreview = async (file) => {
@@ -77,20 +94,11 @@ const MyUpload = ({
     file: { type: string; size: number },
     fileList: any[],
   ) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('图片类型不正确！');
-      return false;
-    }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
       message.error('图片大小必须小于2MB!');
       return false;
     }
-    // if(fileList.length > amount) {
-    //   message.error(`最多只能上传${amount}张图片！`);
-    //   return false
-    // }
     return true;
   };
 
@@ -106,14 +114,17 @@ const MyUpload = ({
       <Upload
         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         listType="picture-card"
-        fileList={fileList}
+        accept={'.pdf,.jpg,.png'}
+        fileList={value}
         onPreview={handlePreview}
         onChange={handleChange}
         maxCount={amount}
         beforeUpload={beforeUpload}
         multiple
       >
-        {fileList.length >= 8 ? null : uploadButton}
+        {fileList.length >= amount || value.length >= amount
+          ? null
+          : uploadButton}
       </Upload>
       <Modal
         visible={previewVisible}

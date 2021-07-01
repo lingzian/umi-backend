@@ -121,7 +121,13 @@ const UserList: FC = () => {
         width={800}
         footer={null}
       >
-        <EditUser />
+        <EditUser
+          successCallback={() => {
+            setState((ele) => ({ ...ele, showPopup: false }));
+            console.log('tableRef', tableRef);
+            tableRef.current.update();
+          }}
+        />
         {/* <EditUser successCallback={this.successCallback} onCancel={() => this.setState({visible: false})} type={type} initialValues={userDetail} /> */}
       </Modal>
     </>

@@ -75,7 +75,6 @@ const MenuView: React.FC = (props) => {
                   if (child.redirect) {
                     return '';
                   } else {
-                    console.log('12312313123');
                     return (
                       <Menu.Item title={child.name} key={child.key}>
                         <Link to={child.path}>
