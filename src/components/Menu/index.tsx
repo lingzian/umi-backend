@@ -15,7 +15,6 @@ const MenuView: React.FC = (props) => {
   const location = useLocation();
   const history = useHistory();
   const match = useRouteMatch();
-  console.log('props.routes', location);
 
   const filterRoute = (menuRoutes: Array<any>) => {
     for (const ele of menuRoutes) {
@@ -51,6 +50,7 @@ const MenuView: React.FC = (props) => {
         userSelect: 'none',
       }}
       width={220}
+      // theme={'light'}
     >
       <div className="logo">
         <Link to={{ pathname: '/' }}>
@@ -63,7 +63,8 @@ const MenuView: React.FC = (props) => {
         mode="inline"
         onClick={() => {}}
         selectedKeys={[menuOperateKey.key]} // 打开的SubMenu
-        theme={config.theme ? 'dark' : 'light'}
+        theme={'dark'}
+        // theme={config.theme ? 'dark' : 'light'}
       >
         {menuRoutes.map((ele: any, idx: any): JSX.Element => {
           let RootIcon = ele.icon;

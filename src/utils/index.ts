@@ -10,7 +10,6 @@ export const myStore = {
     }
   },
   set: function (key: string, value: any) {
-    console.log('进来设置本地', value);
     localStorage.setItem(key, JSON.stringify(value));
   },
   remove: function (key: string) {

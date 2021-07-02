@@ -11,26 +11,26 @@ const Header: React.FC = (props) => {
   const { config } = useSelector((state: ConnectState) => state);
   const dispatch = useDispatch();
   // 更换主题
-  useEffect(() => {
-    if (config.theme) {
-      const script = document.createElement('script');
-      script.id = 'themeJs';
-      script.src =
-        'https://lb-typroject.oss-cn-hangzhou.aliyuncs.com/public/ym/less.min.js';
-      document.body.appendChild(script);
-      setTimeout(() => {
-        const themeStyle = document.getElementById('less:color');
-        if (themeStyle)
-          localStorage.setItem('themeStyle', themeStyle.innerText);
-      }, 500);
-    } else {
-      const themeJs = document.getElementById('themeJs');
-      const themeStyle = document.getElementById('less:color');
-      if (themeJs) themeJs.remove();
-      if (themeStyle) themeStyle.remove();
-      localStorage.removeItem('themeStyle');
-    }
-  }, [config.theme]);
+  // useEffect(() => {
+  //   if (config.theme) {
+  //     const script = document.createElement('script');
+  //     script.id = 'themeJs';
+  //     script.src =
+  //       'https://lb-typroject.oss-cn-hangzhou.aliyuncs.com/public/ym/less.min.js';
+  //     document.body.appendChild(script);
+  //     setTimeout(() => {
+  //       const themeStyle = document.getElementById('less:color');
+  //       if (themeStyle)
+  //         localStorage.setItem('themeStyle', themeStyle.innerText);
+  //     }, 500);
+  //   } else {
+  //     const themeJs = document.getElementById('themeJs');
+  //     const themeStyle = document.getElementById('less:color');
+  //     if (themeJs) themeJs.remove();
+  //     if (themeStyle) themeStyle.remove();
+  //     localStorage.removeItem('themeStyle');
+  //   }
+  // }, [config.theme]);
 
   const changeMenu = (
     <Menu>
